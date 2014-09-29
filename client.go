@@ -19,20 +19,35 @@ func main() {
 
     defer c.Close()
 
-
-    err := c.SetReadBuffer(4096)
+    err = c.SetReadBuffer(4096)
     if err != nil {
         log.Fatalf("%v", err)
     }
 
-    c.
-    
-    buffer := make([]byte, 8192)
-    n, err := c.Read(buffer)
+    msg := []byte("NICK cLannister \r\n")
+    int, err := c.Write(msg)
     if err != nil {
-        log.Fatalf("%v", err)
+        log.Fatalf("%d, %v", int, err)
+    }
+
+    msg = []byte("USER cLannister 8 * :Cersei Lannister\r\n")
+    int, err = c.Write(msg)
+    if err != nil {
+        log.Fatalf("%d, %v", int, err)
     } else {
-        println(n)
+        fmt.Println("I connected")
+    }
+
+    buffer := make([]byte, 8192)
+
+    for {
+        n, err := c.Read(buffer)
+        s := string(buffer[:n])
+        if err != nil {
+            log.Fatalf("%v", err)
+        } else {
+            println(s)
+        }
     }
 }
 
