@@ -4,6 +4,7 @@ package main
 import( "net"
         "log"
         "fmt"
+        "strings"
 )
 
 func main() {
@@ -47,6 +48,10 @@ func main() {
             log.Fatalf("%v", err)
         } else {
             println(s)
+            if strings.HasPrefix(s, "PING") {
+                fmt.Fprintf(c, "PONG %v\r\n", string(s[5:]))
+                fmt.Printf("PONG %v\r\n", string(s[5:]))
+            }
         }
     }
 }
